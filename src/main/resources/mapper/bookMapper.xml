@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hoopoe.mapper.BookMapper">
+
+    <!-- type为实体类Book，包名已经配置，可以直接写类名 -->
+    <resultMap id="bookMap" type="Book">
+        <id property="bookId" column="book_id" />
+        <result property="bookTitle" column="book_title" />
+        <result property="bookSubscribe" column="book_subscribe" />
+        <result property="bookLocation" column="book_location" />
+        <result property="bookInStoreDate" column="book_in_store_date" />
+        <result property="bookStatus" column="book_status" />
+        <result property="bookRemark" column="book_remark" />
+    </resultMap>
+
+    <!-- all fields -->
+    <sql id="allFields" >
+        book_id,book_title,book_subscribe,book_location,book_in_store_date,book_status,book_remark
+    </sql>
+
+    <insert id="insert" parameterType="Book" keyProperty="bookId" keyColumn="book_id" useGeneratedKeys="true">
+        INSERT INTO tb_book (<include refid="allFields"/>)
+        VALUES (
+          #{bookId},#{bookTitle},#{bookSubscribe},#{bookLocation},#{bookInStoreDate},#{bookStatus},#{bookRemark}
+        )
+    </insert>
+</mapper>

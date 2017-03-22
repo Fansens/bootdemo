@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hoopoe.mapper.UserMapper">
+
+    <!-- type为实体类Student，包名已经配置，可以直接写类名 -->
+    <resultMap id="userMap" type="User">
+        <id property="userId" column="user_id" />
+        <result property="userName" column="user_name" />
+        <result property="userBirthday" column="user_birthday" />
+        <result property="userLoginName" column="user_login_name" />
+        <result property="userLoginPassword" column="user_login_password" />
+        <result property="userPhoneNum" column="user_phone_num" />
+        <result property="userAddress" column="user_address" />
+        <result property="userLevel" column="user_level" />
+        <result property="userGender" column="user_gender" />
+        <result property="userRemark" column="user_remark" />
+        <result property="userCreateDate" column="user_create_date" />
+        <result property="userNakedName" column="user_naked_Name" />
+    </resultMap>
+
+    <!-- all fields -->
+    <sql id="allFields" >
+        user_id,user_name,user_birthday,user_login_name,user_login_password,user_phone_num,
+        user_address,user_level,user_gender,user_remark,user_create_date,user_naked_Name
+    </sql>
+
+    <insert id="insert" parameterType="Book" keyProperty="bookId" keyColumn="book_id" useGeneratedKeys="true">
+        INSERT INTO tb_user (<include refid="allFields"/>)
+        VALUES (
+        #{userId},#{userName},#{userBirthday},#{userLoginName},#{userLoginPassword},#{userPhoneNum},
+        #{userAddress},#{userLevel},#{userGender},#{userRemark},#{userCreateDate},#{userNakedName}
+        )
+    </insert>
+</mapper>
