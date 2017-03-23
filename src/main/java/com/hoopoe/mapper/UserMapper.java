@@ -1,7 +1,10 @@
 package com.hoopoe.mapper;
 
 import com.hoopoe.model.User;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 用户数据库操作
@@ -9,7 +12,7 @@ import org.apache.ibatis.annotations.*;
  * Created by wildcrab on 17-3-22.
  */
 @Mapper
-public interface UserMapper {
+public interface UserMapper{
 
     /**
      * 新增用户

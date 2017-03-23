@@ -1,16 +1,21 @@
 package com.hoopoe.model;
 
-import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
  * Created by wildcrab on 17-3-22.
  */
-public class User implements Serializable{
+@Entity
+@Table(name = "tb_user")
+public class User{
 
     /**
      * 用户ID
      */
+    @Id
     private String userId;
 
     /**

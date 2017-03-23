@@ -25,7 +25,7 @@
         user_address,user_level,user_gender,user_remark,user_create_date,user_naked_Name
     </sql>
 
-    <insert id="insert" parameterType="Book" keyProperty="bookId" keyColumn="book_id" useGeneratedKeys="true">
+    <insert id="insert" parameterType="User" keyProperty="userId" keyColumn="user_id" useGeneratedKeys="true">
         INSERT INTO tb_user (<include refid="allFields"/>)
         VALUES (
         #{userId},#{userName},#{userBirthday},#{userLoginName},#{userLoginPassword},#{userPhoneNum},
