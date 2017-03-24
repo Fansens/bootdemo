@@ -6,6 +6,9 @@ import com.hoopoe.common.utils.SerialNo;
 import com.hoopoe.common.utils.StringUtils;
 import com.hoopoe.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -16,7 +19,7 @@ import java.util.Date;
  * Created by wildcrab on 17-3-22.
  */
 @Service
-public class UserService {
+public class UserService implements UserDetailsService{
 
     @Autowired
     private UserDao userDao;
@@ -57,5 +60,10 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    @Override public UserDetails loadUserByUsername( String loginName ) throws UsernameNotFoundException {
+        User user =  userDao.getUserByLogin(loginName);
+        return user;
     }
 }

@@ -1,17 +1,29 @@
 package com.hoopoe.model;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 
 /**
+ * 普通用户
  * Created by wildcrab on 17-3-22.
  */
 @Entity
 @Table(name = "tb_user")
-public class User{
+public class User implements UserDetails{
 
+    public static final int user_normal = 0;
+    public static final int user_vip = 1;
+    public static final int user_svip = 5;
+    public static final int user_boss = 9;
     /**
      * 用户ID
      */
@@ -21,21 +33,25 @@ public class User{
     /**
      * 用户名
      */
+    @Column(nullable = false,length = 100,name = "user_name")
     private String userName;
 
     /**
      * 用户出生日期
      */
+    @Column(nullable = false,name = "user_birthday")
     private Date userBirthday;
 
     /**
      * 用户登陆名
      */
+    @Column(nullable = false,unique = true,name = "user_login_name")
     private String userLoginName;
 
     /**
      * 用户登录密码
      */
+    @Column(nullable = false,name = "user_login_password")
     private String userLoginPassword;
 
     /**
@@ -49,13 +65,15 @@ public class User{
     private String userAddress;
 
     /**
-     * 用户等级（0普通 1会员 2超级会员 3特级会员 9老婆）
+     * 用户等级（0普通 1会员 5超级会员 9老婆）
      */
+    @Column(nullable = false)
     private int userLevel;
 
     /**
      * 性别
      */
+    @Column(nullable = false)
     private int userGender;
 
     /**
@@ -71,6 +89,7 @@ public class User{
     /**
      * 昵称
      */
+    @Column(nullable = false)
     private String userNakedName;
 
     public String getUserId() {
@@ -167,5 +186,33 @@ public class User{
 
     public void setUserNakedName(String userNakedName) {
         this.userNakedName = userNakedName;
+    }
+
+    @Override public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Arrays.asList(new SimpleGrantedAuthority("NORMAL"));
+    }
+
+    @Override public String getPassword() {
+        return this.userLoginPassword;
+    }
+
+    @Override public String getUsername() {
+        return this.userLoginName;
+    }
+
+    @Override public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override public boolean isEnabled() {
+        return true;
     }
 }

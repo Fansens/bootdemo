@@ -5,8 +5,6 @@
  *****************************************************************************/
 package com.hoopoe.configuration;
 
-import com.hoopoe.Dao.LoginUserRepository;
-import com.hoopoe.mapper.UserMapper;
 import com.hoopoe.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +14,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
  *
@@ -38,23 +33,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
 	@Autowired
-	private LoginUserRepository loginUserRepository;
+	private UserService userService;
 
 	@Override protected void configure( AuthenticationManagerBuilder auth ) throws Exception {
-		auth.userDetailsService(new UserDetailsService() {
-			@Override public UserDetails loadUserByUsername( String userName ) throws UsernameNotFoundException {
-				return loginUserRepository.findOne(userName);
-			}
-		});
+		auth.userDetailsService(userService);
 	}
 
 	@Override protected void configure( HttpSecurity http ) throws Exception {
-		http.authorizeRequests()
-				.antMatchers("/").access("hasRole('READER')")//登录者必须有reader角色
-				.antMatchers("/**").permitAll()
-				.and()
+		//normal user
+		http.authorizeRequests()//普通用户
+				.antMatchers("/user").access("hasRole('NORMAL')")//登录者必须有NORMAL角色
+				.antMatchers("/user/**").permitAll()
+				.and()//超级用户
+				.authorizeRequests()
+				.antMatchers("/admin").access("hasRole('ADMIN')")
+				.antMatchers("/admin/**").permitAll()
+				.and()//登录
+				.csrf().disable()
 				.formLogin()
 				.loginPage("/login")//登录表单路径
-				.failureUrl("/login?error=true");
+				.failureUrl("/login?error=true")
+				.and()
+				.logout().logoutUrl("/logout").logoutSuccessUrl("/login").invalidateHttpSession(true);
+
 	}
 }
